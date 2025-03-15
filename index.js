@@ -54,6 +54,16 @@ app.put("/api/books/:id", (req, res) => {
   book.language = req.body.language || book.language;
   res.json(book);
 });
+
+app.delete("/api/books/:id", (req, res) => {
+  const idBook = parseInt(req.params.id);
+  const book = books.find((book) => book.id === idBook);
+  if (!book) return res.status(404).json({ error: "Book not found." });
+
+  books = books.filter((b) => b.id != idBook)
+  res.json(book);
+});
+
 app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Internal Server Error." });
