@@ -20,8 +20,8 @@ app.get("/api/books", (_req, res) => {
 });
 
 app.get("/api/books/:id", (req, res) => {
-  let idBook = parseInt(req.params.id);
-  let book = books.find((book) => (book.id = idBook));
+  const idBook = parseInt(req.params.id);
+  const book = books.find((book) => book.id === idBook);
   if (!book) return res.status(404).json({ error: "Book not found." });
   res.json(book);
 });
@@ -43,6 +43,17 @@ app.post("/api/books", (req, res) => {
   res.status(201).json(newBook);
 });
 
+app.put("/api/books/:id", (req, res) => {
+  const idBook = parseInt(req.params.id);
+  const book = books.find((book) => book.id === idBook);
+  if (!book) return res.status(404).json({ error: "Book not found." });
+
+  book.title = req.body.title || book.title;
+  book.author = req.body.author || book.author;
+  book.genre = req.body.genre || book.genre;
+  book.language = req.body.language || book.language;
+  res.json(book);
+});
 app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Internal Server Error." });
